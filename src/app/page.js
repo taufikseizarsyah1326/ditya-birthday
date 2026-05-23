@@ -78,13 +78,13 @@ export default function BirthdayInvitation() {
       image: '/images/foto1.jpg',
     },
     {
-      image: '/images/foto9.jpg',
+      image: '/images/foto10.jpeg',
     },
     {
       image: '/images/foto5.jpg',
     },
     {
-      image: '/images/foto10.jpeg',
+      image: '/images/foto9.JPG',
     },
   ]
 
