@@ -1,9 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState,
+  useRef,
+} from 'react'
+
+import { motion } from 'framer-motion'
 
 export default function BirthdayInvitation() {
   const targetDate = new Date('2026-05-25T00:00:00')
+  const audioRef = useRef(null)
+
+  const [isPlaying, setIsPlaying] =
+    useState(false)
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -91,7 +101,7 @@ export default function BirthdayInvitation() {
   return (
     <div className="bg-[#1A120B] text-[#f6e9dc] min-h-screen overflow-x-hidden font-[Poppins] scroll-smooth">
       {/* AUDIO */}
-      <audio autoPlay loop>
+      <audio ref={audioRef} loop>
         <source
           src="/music/extraordinary-magic.mp3"
           type="audio/mp3"
@@ -99,7 +109,12 @@ export default function BirthdayInvitation() {
       </audio>
 
       {/* HERO */}
-      <section className="relative h-screen flex items-center justify-center text-center overflow-hidden">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+        className="relative h-screen flex items-center justify-center text-center overflow-hidden"
+      >
         {/* BACKGROUND */}
         <div
           className="absolute inset-0 bg-cover scale-110"
@@ -132,13 +147,16 @@ export default function BirthdayInvitation() {
 
           {/* BUTTON */}
           <button
-            onClick={() =>
-              document
-                .getElementById('main-content')
-                .scrollIntoView({
-                  behavior: 'smooth',
-                })
-            }
+            onClick={() => {
+              audioRef.current.play()
+              setIsPlaying(true)
+
+            document
+              .getElementById('main-content')
+              .scrollIntoView({
+               behavior: 'smooth',
+               })
+            }}
             className="border border-[#d6b18f] px-10 py-4 rounded-full hover:bg-[#d6b18f] hover:text-[#1A120B] transition-all duration-500 tracking-widest uppercase text-sm"
           >
             Open Invitation
@@ -147,12 +165,30 @@ export default function BirthdayInvitation() {
           <p className="mt-10 text-[#caa58d] text-sm tracking-[0.3em]">
             25 MAY 2026
           </p>
+          <button
+            onClick={() => {
+             if (isPlaying) {
+              audioRef.current.pause()
+              setIsPlaying(false)
+            } else {
+              audioRef.current.play()
+              setIsPlaying(true)
+            }
+          }}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#2B1810]/80 border border-[#C8A27A]/40 backdrop-blur-md flex items-center justify-center text-2xl hover:scale-110 transition-all duration-300 shadow-2xl"
+        >
+          {isPlaying ? '⏸️' : '🎵'}
+        </button>
         </div>
-      </section>
+      </motion.section>
 
       {/* ROMANTIC SECTION */}
-      <section
+      <motion.section
         id="main-content"
+        initial={{ opacity: 0, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
         className="py-28 px-6 md:px-20"
       >
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -209,7 +245,7 @@ export default function BirthdayInvitation() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* COUNTDOWN */}
       <section className="py-24 px-6">
